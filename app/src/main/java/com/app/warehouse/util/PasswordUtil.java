@@ -1,4 +1,32 @@
-package util;
+package com.app.warehouse.util;
 
-public class PasswordUtil {
+import org.mindrot.jbcrypt.BCrypt;
+
+public final class PasswordUtil {
+
+    private static final int SALT_ROUNDS = 12;
+
+    private PasswordUtil() {
+        // Prevent instantiation
+    }
+
+    /**
+     * Hash plain text password using BCrypt.
+     */
+    public static String hash(String plainPassword) {
+        if (plainPassword == null || plainPassword.isEmpty()) {
+            throw new IllegalArgumentException("Password cannot be null or empty");
+        }
+        return BCrypt.hashpw(plainPassword, BCrypt.gensalt(SALT_ROUNDS));
+    }
+
+    /**
+     * Verify plain password against hashed password.
+     */
+    public static boolean verify(String plainPassword, String hashedPassword) {
+        if (plainPassword == null || hashedPassword == null) {
+            return false;
+        }
+        return BCrypt.checkpw(plainPassword, hashedPassword);
+    }
 }
