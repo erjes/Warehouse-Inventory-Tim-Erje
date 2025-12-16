@@ -62,7 +62,8 @@ public class CustomerDaoImpl implements CustomerDao {
     @Override
     public int update(Customer customer) throws SQLException {
         String sql = "UPDATE customer SET name=?, address=?, contact=? WHERE id=?";
-
+        
+        // Connect database
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
