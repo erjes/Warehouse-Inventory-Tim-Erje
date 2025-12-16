@@ -2,8 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package ui.supplier;
-
+package com.app.warehouse.ui.supplier;
+import com.app.warehouse.ui.MainFrame;
+import java.awt.Color;
+import java.awt.Font;
+import javax.swing.JButton;
+import javax.swing.SwingUtilities;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 /**
  *
  * @author MUHAMMAD FADHILLAH
@@ -13,9 +19,67 @@ public class SupplierPanel extends javax.swing.JPanel {
     /**
      * Creates new form SupplierPanel
      */
-    public SupplierPanel() {
-        initComponents();
-    }
+public SupplierPanel() {
+    initComponents();   
+    initTable();
+    initDesign();       
+    setupLayout(); 
+}
+
+private void initDesign() {
+    // Background utama
+    this.setBackground(new java.awt.Color(243, 244, 246));
+    panelTop.setBackground(Color.WHITE);
+
+    // Judul
+    jLabel1.setFont(new Font("Segoe UI", Font.BOLD, 18));
+    jLabel1.setForeground(new Color(30, 58, 138));
+
+    // Button styling
+    styleButton(btnAdd, new Color(59, 130, 246));    // biru
+    styleButton(btnEdit, new Color(234, 179, 8));    // kuning
+    styleButton(btnDelete, new Color(239, 68, 68));  // merah
+
+    // Table styling
+    jTable1.setRowHeight(28);
+    jTable1.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+    jTable1.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 13));
+    jTable1.getTableHeader().setBackground(new Color(30, 58, 138));
+    jTable1.getTableHeader().setForeground(Color.WHITE);
+}
+
+private void styleButton(JButton button, Color bg) {
+    button.setBackground(bg);
+    button.setForeground(Color.WHITE);
+    button.setFocusPainted(false);
+    button.setFont(new Font("Segoe UI", Font.BOLD, 13));
+}
+
+private void setupLayout() {
+    // panel pembungkus agar di tengah
+    JPanel wrapper = new JPanel(new java.awt.GridBagLayout());
+    wrapper.setBackground(new Color(243, 244, 246));
+
+    panelTop.setPreferredSize(new java.awt.Dimension(900, 500));
+
+    wrapper.add(panelTop);
+
+    this.setLayout(new java.awt.BorderLayout());
+    this.add(wrapper, java.awt.BorderLayout.CENTER);
+}
+
+
+private void initTable() {
+    jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        new Object[][]{},
+        new String[]{"ID", "Name", "Contact"}
+    ) {
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+    });
+}
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -35,8 +99,10 @@ public class SupplierPanel extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
 
         btnAdd.setText("Add");
+        btnAdd.addActionListener(this::btnAddActionPerformed);
 
         btnEdit.setText("Edit");
+        btnEdit.addActionListener(this::btnEditActionPerformed);
 
         btnDelete.setText("Delete");
 
@@ -106,6 +172,40 @@ public class SupplierPanel extends javax.swing.JPanel {
                 .addComponent(panelTop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+    JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(this);
+    SupplierFormDialog dialog = new SupplierFormDialog(parent, true);
+    dialog.setLocationRelativeTo(parent);
+    dialog.setVisible(true);
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+int row = jTable1.getSelectedRow();
+
+    if (row == -1) {
+        javax.swing.JOptionPane.showMessageDialog(this,
+            "Pilih data supplier terlebih dahulu!",
+            "Warning",
+            javax.swing.JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(this);
+    SupplierFormDialog dialog = new SupplierFormDialog(parent);
+    dialog.setVisible(true);
+   // TODO add your handling code here:
+    }//GEN-LAST:event_btnEditActionPerformed
+public static void main(String[] args) {
+    SwingUtilities.invokeLater(() -> {
+        JFrame frame = new JFrame("Supplier Panel Test");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // FULL SCREEN
+        frame.setContentPane(new SupplierPanel());
+        frame.setVisible(true);
+    });
+}
+
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

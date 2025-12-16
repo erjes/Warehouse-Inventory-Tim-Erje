@@ -2,23 +2,29 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package ui.supplier;
-
+package com.app.warehouse.ui.supplier;
+import java.awt.*;
+import javax.swing.*;
 /**
  *
  * @author MUHAMMAD FADHILLAH
  */
 public class SupplierFormDialog extends javax.swing.JDialog {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(SupplierFormDialog.class.getName());
+
+    public SupplierFormDialog(Frame parent, boolean modal) {
+        super(parent, modal);
+        initComponents();
+    }
 
     /**
      * Creates new form SupplierFormDialog
      */
-    public SupplierFormDialog(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
-        initComponents();
-    }
+public SupplierFormDialog(JFrame parent) {
+    super(parent, true);   // modal = true
+    initComponents();
+    setLocationRelativeTo(parent);
+}
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -108,12 +114,9 @@ public class SupplierFormDialog extends javax.swing.JDialog {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -122,13 +125,13 @@ public class SupplierFormDialog extends javax.swing.JDialog {
                 }
             }
         } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
+            // BARIS INI YANG DIPERBAIKI (logger dihapus)
+            ex.printStackTrace();
         }
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
             public void run() {
                 SupplierFormDialog dialog = new SupplierFormDialog(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
