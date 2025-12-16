@@ -2,22 +2,68 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package ui;
+package com.app.warehouse.ui;
+
+import javax.swing.JFrame;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  *
  * @author MUHAMMAD FADHILLAH
  */
 public class MainFrame extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MainFrame.class.getName());
 
     /**
      * Creates new form MainFrame
      */
     public MainFrame() {
-        initComponents();
+        initComponents(); // WAJIB PALING ATAS
+
+        setTitle("Warehouse Inventory System");
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setLocationRelativeTo(null);
+
+        // GANTI NAMA TAB (AMAN)
+        tabMain.setTitleAt(0, "📦 Master Data");
+        tabMain.setTitleAt(1, "💸 Transaksi");
+        tabMain.setTitleAt(2, "📊 Laporan");
+
+        initHeader();
+        initPanelDesign();
     }
+
+    private void initHeader() {
+        JPanel header = new JPanel(new BorderLayout());
+        header.setPreferredSize(new Dimension(0, 60));
+        header.setBackground(new Color(30, 58, 138)); // biru tua
+
+        JLabel title = new JLabel("  Warehouse Inventory System");
+        title.setForeground(Color.WHITE);
+        title.setFont(new Font("Segoe UI", Font.BOLD, 18));
+
+        JLabel user = new JLabel("Login sebagai: Admin  ");
+        user.setForeground(Color.WHITE);
+
+        header.add(title, BorderLayout.WEST);
+        header.add(user, BorderLayout.EAST);
+
+        PanelMain.add(header, BorderLayout.NORTH);
+    }
+
+    private void initPanelDesign() {
+        panelMasterData.setLayout(new BorderLayout());
+        panelTransaction.setLayout(new BorderLayout());
+        panelReport.setLayout(new BorderLayout());
+
+        panelMasterData.add(createTitle("MASTER DATA"), BorderLayout.NORTH);
+        panelTransaction.add(createTitle("TRANSAKSI"), BorderLayout.NORTH);
+        panelReport.add(createTitle("LAPORAN"), BorderLayout.NORTH);
+    }
+
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -35,6 +81,8 @@ public class MainFrame extends javax.swing.JFrame {
         panelReport = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        PanelMain.setLayout(new java.awt.BorderLayout());
 
         tabMain.setName("Master Data"); // NOI18N
 
@@ -80,22 +128,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         tabMain.addTab("panelReport       ", panelReport);
 
-        javax.swing.GroupLayout PanelMainLayout = new javax.swing.GroupLayout(PanelMain);
-        PanelMain.setLayout(PanelMainLayout);
-        PanelMainLayout.setHorizontalGroup(
-            PanelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PanelMainLayout.createSequentialGroup()
-                .addGap(54, 54, 54)
-                .addComponent(tabMain, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(65, Short.MAX_VALUE))
-        );
-        PanelMainLayout.setVerticalGroup(
-            PanelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PanelMainLayout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addComponent(tabMain, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(34, Short.MAX_VALUE))
-        );
+        PanelMain.add(tabMain, java.awt.BorderLayout.CENTER);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -116,27 +149,25 @@ public class MainFrame extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private JPanel createTitle(String text) {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        panel.setBackground(new Color(243, 244, 246)); // abu muda
+        panel.setPreferredSize(new Dimension(0, 50));
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new MainFrame().setVisible(true));
+        JLabel label = new JLabel(text);
+        label.setFont(new Font("Segoe UI", Font.BOLD, 16));
+
+        panel.add(label);
+        return panel;
     }
+    
+public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            new MainFrame().setVisible(true);
+        });
+    }
+
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PanelMain;
