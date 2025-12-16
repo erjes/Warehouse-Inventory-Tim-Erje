@@ -3,84 +3,130 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package com.app.warehouse.ui.supplier;
-import com.app.warehouse.ui.MainFrame;
+
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.SwingUtilities;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author MUHAMMAD FADHILLAH
  */
 public class SupplierPanel extends javax.swing.JPanel {
 
-    /**
-     * Creates new form SupplierPanel
-     */
-public SupplierPanel() {
-    initComponents();   
-    initTable();
-    initDesign();       
-    setupLayout(); 
-}
-
-private void initDesign() {
-    // Background utama
-    this.setBackground(new java.awt.Color(243, 244, 246));
-    panelTop.setBackground(Color.WHITE);
-
-    // Judul
-    jLabel1.setFont(new Font("Segoe UI", Font.BOLD, 18));
-    jLabel1.setForeground(new Color(30, 58, 138));
-
-    // Button styling
-    styleButton(btnAdd, new Color(59, 130, 246));    // biru
-    styleButton(btnEdit, new Color(234, 179, 8));    // kuning
-    styleButton(btnDelete, new Color(239, 68, 68));  // merah
-
-    // Table styling
-    jTable1.setRowHeight(28);
-    jTable1.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-    jTable1.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 13));
-    jTable1.getTableHeader().setBackground(new Color(30, 58, 138));
-    jTable1.getTableHeader().setForeground(Color.WHITE);
-}
-
-private void styleButton(JButton button, Color bg) {
-    button.setBackground(bg);
-    button.setForeground(Color.WHITE);
-    button.setFocusPainted(false);
-    button.setFont(new Font("Segoe UI", Font.BOLD, 13));
-}
-
-private void setupLayout() {
-    // panel pembungkus agar di tengah
-    JPanel wrapper = new JPanel(new java.awt.GridBagLayout());
-    wrapper.setBackground(new Color(243, 244, 246));
-
-    panelTop.setPreferredSize(new java.awt.Dimension(900, 500));
-
-    wrapper.add(panelTop);
-
-    this.setLayout(new java.awt.BorderLayout());
-    this.add(wrapper, java.awt.BorderLayout.CENTER);
-}
+    // --- 1. Deklarasi Variabel ---
+private JLabel lblTitle;
+private JTable tableSupplier;
+private JScrollPane scrollPane;
+private JPanel headerPanel;
+private JPanel buttonPanel;
 
 
-private void initTable() {
-    jTable1.setModel(new javax.swing.table.DefaultTableModel(
-        new Object[][]{},
-        new String[]{"ID", "Name", "Contact"}
-    ) {
-        public boolean isCellEditable(int row, int column) {
-            return false;
-        }
-    });
-}
+    public SupplierPanel() {
+        // 1. Inisialisasi Komponen Manual
+        initComponentsManual();
+        
+        // 2. Setup Tabel
+        initTable();
+        
+        // 3. Styling (Warna & Font)
+        initDesign();
+        
+        // 4. Tata Letak (Layout)
+        setupLayout();
+    }
 
+    private void initComponentsManual() {
+        // Inisialisasi variabel
+        btnAdd = new JButton("Add");
+        btnEdit = new JButton("Edit");
+        btnDelete = new JButton("Delete");
+        lblTitle = new JLabel("Manage Supplier");
+        tableSupplier = new JTable();
+        scrollPane = new JScrollPane(tableSupplier);
+        headerPanel = new JPanel();
+        buttonPanel = new JPanel();
 
+        // Action Listeners (Sambungkan tombol ke fungsi di bawah)
+        btnAdd.addActionListener(this::btnAddActionPerformed);
+        btnEdit.addActionListener(this::btnEditActionPerformed);
+        btnDelete.addActionListener(this::btnDeleteActionPerformed);
+    }
+
+    private void setupLayout() {
+        this.setLayout(new BorderLayout(20, 20)); 
+        this.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); 
+
+        // --- Header Section ---
+        headerPanel.setLayout(new BorderLayout());
+        headerPanel.setOpaque(false);
+
+        headerPanel.add(lblTitle, BorderLayout.WEST);
+
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 0));
+        buttonPanel.setOpaque(false);
+        buttonPanel.add(btnAdd);
+        buttonPanel.add(btnEdit);
+        buttonPanel.add(btnDelete);
+        
+        headerPanel.add(buttonPanel, BorderLayout.EAST);
+
+        this.add(headerPanel, BorderLayout.NORTH);
+        this.add(scrollPane, BorderLayout.CENTER);
+    }
+
+    private void initDesign() {
+        this.setBackground(new Color(243, 244, 246)); 
+
+        lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        lblTitle.setForeground(new Color(30, 58, 138));
+
+        styleButton(btnAdd, new Color(59, 130, 246));   
+        styleButton(btnEdit, new Color(234, 179, 8));   
+        styleButton(btnDelete, new Color(239, 68, 68)); 
+
+        tableSupplier.setRowHeight(35);
+        tableSupplier.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        tableSupplier.setGridColor(new Color(229, 231, 235));
+        tableSupplier.setShowVerticalLines(false);
+        
+        tableSupplier.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 14));
+        tableSupplier.getTableHeader().setBackground(new Color(30, 58, 138));
+        tableSupplier.getTableHeader().setForeground(Color.WHITE);
+        tableSupplier.getTableHeader().setPreferredSize(new Dimension(0, 40));
+    }
+
+    private void styleButton(JButton button, Color bg) {
+        button.setBackground(bg);
+        button.setForeground(Color.WHITE);
+        button.setFocusPainted(false);
+        button.setBorderPainted(false);
+        button.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        button.setPreferredSize(new Dimension(100, 35));
+    }
+
+    private void initTable() {
+        tableSupplier.setModel(new DefaultTableModel(
+            new Object[][]{}, 
+            new String[]{"ID", "Name", "Contact"} 
+        ) {
+            public boolean isCellEditable(int row, int column) {
+                return false; 
+            }
+        });
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -105,6 +151,7 @@ private void initTable() {
         btnEdit.addActionListener(this::btnEditActionPerformed);
 
         btnDelete.setText("Delete");
+        btnDelete.addActionListener(this::btnDeleteActionPerformed);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -174,37 +221,44 @@ private void initTable() {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-    JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(this);
-    SupplierFormDialog dialog = new SupplierFormDialog(parent, true);
-    dialog.setLocationRelativeTo(parent);
-    dialog.setVisible(true);
+JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(this);
+        SupplierFormDialog dialog = new SupplierFormDialog(parent, true);
+        dialog.setLocationRelativeTo(parent);
+        dialog.setVisible(true);
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-int row = jTable1.getSelectedRow();
+int row = tableSupplier.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Pilih data supplier terlebih dahulu!", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
-    if (row == -1) {
-        javax.swing.JOptionPane.showMessageDialog(this,
-            "Pilih data supplier terlebih dahulu!",
-            "Warning",
-            javax.swing.JOptionPane.WARNING_MESSAGE);
-        return;
+        JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(this);
+        SupplierFormDialog dialog = new SupplierFormDialog(parent,true); 
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnEditActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+int row = tableSupplier.getSelectedRow();
+        if (row == -1) {
+             JOptionPane.showMessageDialog(this, "Pilih data yang ingin dihapus!", "Warning", JOptionPane.WARNING_MESSAGE);
+             return;
+        }
+        JOptionPane.showMessageDialog(this, "Fungsi Delete belum diimplementasikan");
+    
+    }//GEN-LAST:event_btnDeleteActionPerformed
+public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("Supplier Panel Test");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(1024, 768); 
+            frame.setLocationRelativeTo(null); 
+            frame.setContentPane(new SupplierPanel());
+            frame.setVisible(true);
+        });
     }
 
-    JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(this);
-    SupplierFormDialog dialog = new SupplierFormDialog(parent);
-    dialog.setVisible(true);
-   // TODO add your handling code here:
-    }//GEN-LAST:event_btnEditActionPerformed
-public static void main(String[] args) {
-    SwingUtilities.invokeLater(() -> {
-        JFrame frame = new JFrame("Supplier Panel Test");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // FULL SCREEN
-        frame.setContentPane(new SupplierPanel());
-        frame.setVisible(true);
-    });
-}
 
 
 
