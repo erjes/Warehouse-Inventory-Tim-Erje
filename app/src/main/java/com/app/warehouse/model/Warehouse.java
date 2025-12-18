@@ -26,6 +26,11 @@ public class Warehouse {
         return name;
     }
 
+    public String toString() {
+        return name; // atau getName()
+    }
+
+
     public void setName(String name) {
         this.name = name;
     }

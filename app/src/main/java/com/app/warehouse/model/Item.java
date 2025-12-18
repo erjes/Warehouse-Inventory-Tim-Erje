@@ -7,7 +7,6 @@ public class Item {
 
     private int id;
     private int warehouseId;
-    private String sku;
     private String name;
     private String category;
     private BigDecimal price;
@@ -17,11 +16,10 @@ public class Item {
 
     public Item() {}
 
-    public Item(int id, int warehouseId, String sku, String name,
+    public Item(int id, int warehouseId, String name,
                 String category, BigDecimal price, int quantity) {
         this.id = id;
         this.warehouseId = warehouseId;
-        this.sku = sku;
         this.name = name;
         this.category = category;
         this.price = price;
@@ -42,14 +40,6 @@ public class Item {
 
     public void setWarehouseId(int warehouseId) {
         this.warehouseId = warehouseId;
-    }
-
-    public String getSku() {
-        return sku;
-    }
-
-    public void setSku(String sku) {
-        this.sku = sku;
     }
 
     public String getName() {

@@ -14,18 +14,17 @@ public class ItemDaoImpl implements ItemDao {
     public int create(Item item) throws SQLException {
         String sql = """
             INSERT INTO item (warehouse_id, name, category, price, quantity)
-            VALUES (?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?)
         """;
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setInt(1, item.getWarehouseId());
-            ps.setString(2, item.getSku());
-            ps.setString(3, item.getName());
-            ps.setString(4, item.getCategory());
-            ps.setBigDecimal(5, item.getPrice());
-            ps.setInt(6, item.getQuantity());
+            ps.setString(2, item.getName());
+            ps.setString(3, item.getCategory());
+            ps.setBigDecimal(4, item.getPrice());
+            ps.setInt(5, item.getQuantity());
             ps.executeUpdate();
 
             ResultSet rs = ps.getGeneratedKeys();
@@ -82,7 +81,7 @@ public class ItemDaoImpl implements ItemDao {
     @Override
     public int update(Item item) throws SQLException {
         String sql = """
-            UPDATE item SET warehouse_id=?, sku=?, name=?, category=?, price=?, quantity=?
+            UPDATE item SET warehouse_id=?, name=?, category=?, price=?, quantity=?
             WHERE id=?
         """;
 
@@ -90,12 +89,11 @@ public class ItemDaoImpl implements ItemDao {
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, item.getWarehouseId());
-            ps.setString(2, item.getSku());
-            ps.setString(3, item.getName());
-            ps.setString(4, item.getCategory());
-            ps.setBigDecimal(5, item.getPrice());
-            ps.setInt(6, item.getQuantity());
-            ps.setInt(7, item.getId());
+            ps.setString(2, item.getName());
+            ps.setString(3, item.getCategory());
+            ps.setBigDecimal(4, item.getPrice());
+            ps.setInt(5, item.getQuantity());
+            ps.setInt(6, item.getId());
             return ps.executeUpdate();
         }
     }

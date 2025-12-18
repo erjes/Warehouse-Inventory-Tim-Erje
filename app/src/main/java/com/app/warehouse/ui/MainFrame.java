@@ -7,6 +7,7 @@ package com.app.warehouse.ui;
 import javax.swing.JFrame;
 import javax.swing.*;
 import java.awt.*;
+import com.formdev.flatlaf.FlatLightLaf;
 
 /**
  *
@@ -162,12 +163,18 @@ public class MainFrame extends javax.swing.JFrame {
     }
     
 public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new MainFrame().setVisible(true);
-        });
+    
+    try {
+        // Ganti ke Dark Mode
+        UIManager.setLookAndFeel( new com.formdev.flatlaf.FlatDarkLaf() );
+    } catch( Exception ex ) {
+        System.err.println( "Gagal pasang FlatLaf" );
     }
 
-
+    SwingUtilities.invokeLater(() -> {
+        new MainFrame().setVisible(true);
+    });
+}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PanelMain;

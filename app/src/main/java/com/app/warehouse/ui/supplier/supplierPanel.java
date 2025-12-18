@@ -4,6 +4,11 @@
  */
 package com.app.warehouse.ui.supplier;
 
+import com.app.warehouse.dao.SupplierDao;
+import com.app.warehouse.dao.impl.SupplierDaoImpl;
+import com.app.warehouse.model.Supplier;
+
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -32,20 +37,15 @@ private JTable tableSupplier;
 private JScrollPane scrollPane;
 private JPanel headerPanel;
 private JPanel buttonPanel;
+private Supplier supplier;
 
 
     public SupplierPanel() {
-        // 1. Inisialisasi Komponen Manual
         initComponentsManual();
-        
-        // 2. Setup Tabel
         initTable();
-        
-        // 3. Styling (Warna & Font)
         initDesign();
-        
-        // 4. Tata Letak (Layout)
         setupLayout();
+        loadData();
     }
 
     private void initComponentsManual() {
@@ -127,6 +127,33 @@ private JPanel buttonPanel;
             }
         });
     }
+private void loadData() {
+    try {
+        SupplierDao dao = new SupplierDaoImpl();
+        java.util.List<Supplier> list = dao.findAll();
+
+        DefaultTableModel model =
+            (DefaultTableModel) tableSupplier.getModel();
+        model.setRowCount(0);
+
+        for (Supplier s : list) {
+            model.addRow(new Object[]{
+                s.getId(),
+                s.getName(),
+                s.getContact()
+            });
+        }
+
+    } catch (java.sql.SQLException e) {
+        JOptionPane.showMessageDialog(this,
+            "Gagal load data supplier:\n" + e.getMessage(),
+            "Error",
+            JOptionPane.ERROR_MESSAGE);
+    }
+}
+
+
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -225,28 +252,66 @@ JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(this);
         SupplierFormDialog dialog = new SupplierFormDialog(parent, true);
         dialog.setLocationRelativeTo(parent);
         dialog.setVisible(true);
+        loadData(); 
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-int row = tableSupplier.getSelectedRow();
-        if (row == -1) {
-            JOptionPane.showMessageDialog(this, "Pilih data supplier terlebih dahulu!", "Warning", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+ int row = tableSupplier.getSelectedRow();
+    if (row == -1) {
+        JOptionPane.showMessageDialog(this,
+                "Pilih data supplier terlebih dahulu!",
+                "Warning",
+                JOptionPane.WARNING_MESSAGE);
+        return;
+    }
 
-        JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(this);
-        SupplierFormDialog dialog = new SupplierFormDialog(parent,true); 
-        dialog.setVisible(true);
+    DefaultTableModel model = (DefaultTableModel) tableSupplier.getModel();
+
+    Supplier s = new Supplier();
+    s.setId((Integer) model.getValueAt(row, 0));
+    s.setName((String) model.getValueAt(row, 1));
+    s.setContact((String) model.getValueAt(row, 2));
+
+    JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(this);
+    SupplierFormDialog dialog = new SupplierFormDialog(parent, true);
+dialog.setSupplier(s); // kirim data ke dialog
+    dialog.setLocationRelativeTo(parent);
+    dialog.setVisible(true);
+
+    loadData();
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-int row = tableSupplier.getSelectedRow();
-        if (row == -1) {
-             JOptionPane.showMessageDialog(this, "Pilih data yang ingin dihapus!", "Warning", JOptionPane.WARNING_MESSAGE);
-             return;
-        }
-        JOptionPane.showMessageDialog(this, "Fungsi Delete belum diimplementasikan");
-    
+    int row = tableSupplier.getSelectedRow();
+    if (row == -1) {
+        JOptionPane.showMessageDialog(this,
+                "Pilih data supplier yang ingin dihapus!",
+                "Warning",
+                JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    int confirm = JOptionPane.showConfirmDialog(this,
+            "Yakin ingin menghapus supplier ini?",
+            "Konfirmasi",
+            JOptionPane.YES_NO_OPTION);
+
+    if (confirm != JOptionPane.YES_OPTION) return;
+
+    try {
+        int id = (Integer) tableSupplier.getValueAt(row, 0);
+        SupplierDao dao = new SupplierDaoImpl();
+        dao.delete(id);
+
+        JOptionPane.showMessageDialog(this, "Data supplier berhasil dihapus");
+        loadData();
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this,
+                "Gagal menghapus data: " + e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_btnDeleteActionPerformed
 public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
@@ -258,8 +323,6 @@ public static void main(String[] args) {
             frame.setVisible(true);
         });
     }
-
-
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
