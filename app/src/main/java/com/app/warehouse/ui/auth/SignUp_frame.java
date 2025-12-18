@@ -229,6 +229,10 @@ public class SignUp_frame extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String nameUser = userName.getText();
         String email = userEmail.getText();
+        String passwordUser = userPassword.getText();
+        String confirmPassword = userConfirmPassword.getText();
+        
+        
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
